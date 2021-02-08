@@ -2,7 +2,9 @@
 
 def call(Map param) {
     pipeline {
-        agent any
+        agent {
+            label 'manager'
+        }
 
         environment {
             registry = "kgunarno/bliblimart-frontend"
