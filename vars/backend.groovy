@@ -55,6 +55,8 @@ def call(Map param) {
                           sleep 15
                           docker container prune
                           docker image prune
+                          docker rm clair
+                          docker rm db
                       '''
                   }
               }
