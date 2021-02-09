@@ -50,9 +50,11 @@ def call(Map param) {
                       sh '''
                           docker rmi ${registry}:${BUILD_NUMBER}
                           sleep 15
-                          docker stop $(docker ps -a -q)
+                          docker stop clair
+                          docker stop db
                           sleep 15
-                          docker rm $(docker ps -a -q)
+                          docker container prune
+                          docker image prune
                       '''
                   }
               }
