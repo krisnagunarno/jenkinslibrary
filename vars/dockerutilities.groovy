@@ -5,7 +5,7 @@ def call(Map param){
         pipeline {
 
           agent {
-            node 'manager-1'
+            node 'manager1'
           }
 
           stages {
