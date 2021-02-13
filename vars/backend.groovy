@@ -21,19 +21,19 @@ def call(Map param) {
                   }
               }
 
-              stage('Analyze Docker Image') {
-                  steps {
-                      sh '''
-                          docker run -p 5432:5432 -d --name db ${scannerDB}
-                          sleep 15
-                          docker run -p 6060:6060 --link db:postgres -d --name clair ${scannerImage}
-                          sleep 1
-                          DOCKER_GATEWAY=$(docker network inspect bridge --format "{{range .IPAM.Config}}{{.Gateway}}{{end}}")
-                          wget -qO clair-scanner https://github.com/arminc/clair-scanner/releases/download/v8/clair-scanner_linux_amd64 && chmod +x clair-scanner
-                          ./clair-scanner --ip="$DOCKER_GATEWAY" ${registry} || exit 0
-                      '''
-                  }
-              }
+ //             stage('Analyze Docker Image') {
+ //                 steps {
+ //                     sh '''
+ //                         docker run -p 5432:5432 -d --name db ${scannerDB}
+ //                         sleep 15
+ //                         docker run -p 6060:6060 --link db:postgres -d --name clair ${scannerImage}
+ //                         sleep 1
+ //                         DOCKER_GATEWAY=$(docker network inspect bridge --format "{{range .IPAM.Config}}{{.Gateway}}{{end}}")
+ //                         wget -qO clair-scanner https://github.com/arminc/clair-scanner/releases/download/v8/clair-scanner_linux_amd64 && chmod +x clair-scanner
+ //                         ./clair-scanner --ip="$DOCKER_GATEWAY" ${registry} || exit 0
+ //                     '''
+ //                 }
+ //             }
 
               stage('Publish Docker Image') {
                   steps {
@@ -49,9 +49,6 @@ def call(Map param) {
                   steps {
                       sh '''
                           docker rmi ${registry}:${BUILD_NUMBER}
-                          sleep 15
-                          docker stop clair
-                          docker stop db
                           sleep 15
                           docker container prune -f
                           docker image prune -f
